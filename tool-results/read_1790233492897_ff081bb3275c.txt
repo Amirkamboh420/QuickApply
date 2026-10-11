@@ -1,0 +1,1206 @@
+     1→"use client";
+     2→
+     3→import { motion, AnimatePresence } from "framer-motion";
+     4→import { useEffect, useState, useRef } from "react";
+     5→import {
+     6→  Zap,
+     7→  FileText,
+     8→  ShieldCheck,
+     9→  MousePointerClick,
+    10→  CheckCircle2,
+    11→  Globe,
+    12→  ChevronDown,
+    13→  Menu,
+    14→  X,
+    15→  ArrowRight,
+    16→  Sparkles,
+    17→  Clock,
+    18→  Languages,
+    19→  Bell,
+    20→  Star,
+    21→  Quote,
+    22→  Chrome,
+    23→  RefreshCw,
+    24→  Layers,
+    25→  Target,
+    26→  BarChart3,
+    27→} from "lucide-react";
+    28→import {
+    29→  Accordion,
+    30→  AccordionContent,
+    31→  AccordionItem,
+    32→  AccordionTrigger,
+    33→} from "@/components/ui/accordion";
+    34→import { Button } from "@/components/ui/button";
+    35→import { Badge } from "@/components/ui/badge";
+    36→import {
+    37→  Card,
+    38→  CardContent,
+    39→  CardHeader,
+    40→  CardTitle,
+    41→} from "@/components/ui/card";
+    42→import { Separator } from "@/components/ui/separator";
+    43→import { ThemeToggle } from "@/components/theme-toggle";
+    44→
+    45→const NAV_LINKS = [
+    46→  { label: "Features", href: "#features" },
+    47→  { label: "How it works", href: "#how" },
+    48→  { label: "Compatibility", href: "#compat" },
+    49→  { label: "Pricing", href: "#pricing" },
+    50→  { label: "FAQ", href: "#faq" },
+    51→];
+    52→
+    53→const SITES = [
+    54→  { name: "LinkedIn", color: "#0A66C2" },
+    55→  { name: "Indeed", color: "#003A9B" },
+    56→  { name: "Rozee.pk", color: "#E84B3C" },
+    57→  { name: "Mustakbil", color: "#0077B6" },
+    58→  { name: "Bayt", color: "#0a3d62" },
+    59→  { name: "Glassdoor", color: "#0CAA41" },
+    60→  { name: "Greenhouse", color: "#0077B6" },
+    61→  { name: "Lever", color: "#0a3d62" },
+    62→];
+    63→
+    64→export function Landing({ onLaunch }: { onLaunch: () => void }) {
+    65→  const [scrolled, setScrolled] = useState(false);
+    66→  const [mobileOpen, setMobileOpen] = useState(false);
+    67→
+    68→  useEffect(() => {
+    69→    const onScroll = () => setScrolled(window.scrollY > 12);
+    70→    onScroll();
+    71→    window.addEventListener("scroll", onScroll, { passive: true });
+    72→    return () => window.removeEventListener("scroll", onScroll);
+    73→  }, []);
+    74→
+    75→  return (
+    76→    <div className="min-h-screen flex flex-col bg-background">
+    77→      {/* NAV */}
+    78→      <header
+    79→        className={`sticky top-0 z-50 transition-all duration-300 ${
+    80→          scrolled ? "glass-card shadow-ocean" : "bg-transparent"
+    81→        }`}
+    82→      >
+    83→        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    84→          <div className="flex h-16 items-center justify-between">
+    85→            <Brand />
+    86→            <nav className="hidden md:flex items-center gap-1">
+    87→              {NAV_LINKS.map((l) => (
+    88→                <a
+    89→                  key={l.href}
+    90→                  href={l.href}
+    91→                  className="px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground rounded-md transition-colors hover:bg-secondary/60"
+    92→                >
+    93→                  {l.label}
+    94→                </a>
+    95→              ))}
+    96→            </nav>
+    97→            <div className="hidden md:flex items-center gap-2">
+    98→              <ThemeToggle />
+    99→              <Button variant="ghost" size="sm" onClick={onLaunch}>
+   100→                Sign in
+   101→              </Button>
+   102→              <Button size="sm" onClick={onLaunch} className="bg-ocean hover:bg-ocean/90">
+   103→                Open Dashboard
+   104→                <ArrowRight className="ml-1.5 h-4 w-4" />
+   105→              </Button>
+   106→            </div>
+   107→            <button
+   108→              className="md:hidden inline-flex items-center justify-center rounded-md p-2 hover:bg-secondary"
+   109→              onClick={() => setMobileOpen((v) => !v)}
+   110→              aria-label="Toggle menu"
+   111→            >
+   112→              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+   113→            </button>
+   114→          </div>
+   115→        </div>
+   116→        <AnimatePresence>
+   117→          {mobileOpen && (
+   118→            <motion.div
+   119→              initial={{ height: 0, opacity: 0 }}
+   120→              animate={{ height: "auto", opacity: 1 }}
+   121→              exit={{ height: 0, opacity: 0 }}
+   122→              className="md:hidden overflow-hidden glass-card border-t border-border"
+   123→            >
+   124→              <div className="px-4 py-3 space-y-1">
+   125→                {NAV_LINKS.map((l) => (
+   126→                  <a
+   127→                    key={l.href}
+   128→                    href={l.href}
+   129→                    onClick={() => setMobileOpen(false)}
+   130→                    className="block px-3 py-2 text-sm font-medium rounded-md hover:bg-secondary"
+   131→                  >
+   132→                    {l.label}
+   133→                  </a>
+   134→                ))}
+   135→                <div className="flex items-center justify-between px-3 py-2 pt-3">
+   136→                  <span className="text-xs text-muted-foreground">Theme</span>
+   137→                  <ThemeToggle />
+   138→                </div>
+   139→                <Button size="sm" className="w-full mt-2 bg-ocean hover:bg-ocean/90" onClick={onLaunch}>
+   140→                  Open Dashboard
+   141→                </Button>
+   142→              </div>
+   143→            </motion.div>
+   144→          )}
+   145→        </AnimatePresence>
+   146→      </header>
+   147→
+   148→      <main className="flex-1">
+   149→        <Hero onLaunch={onLaunch} />
+   150→        <LogoStrip />
+   151→        <LiveActivity />
+   152→        <Problem />
+   153→        <HowItWorks />
+   154→        <Features />
+   155→        <ExtensionDemo />
+   156→        <Comparison />
+   157→        <Pricing onLaunch={onLaunch} />
+   158→        <Testimonials />
+   159→        <FAQ />
+   160→        <FinalCTA onLaunch={onLaunch} />
+   161→      </main>
+   162→
+   163→      <SiteFooter />
+   164→    </div>
+   165→  );
+   166→}
+   167→
+   168→function Brand() {
+   169→  return (
+   170→    <a href="#" className="flex items-center gap-2.5 group">
+   171→      <div className="relative h-9 w-9 rounded-xl bg-gradient-to-br from-ink via-ocean to-sky shadow-ocean grid place-items-center overflow-hidden">
+   172→        <Zap className="h-5 w-5 text-white relative z-10" fill="white" />
+   173→        <div className="absolute inset-0 animate-shimmer" />
+   174→      </div>
+   175→      <div className="flex flex-col leading-none">
+   176→        <span className="text-lg font-bold tracking-tight text-foreground">
+   177→          Quick<span className="text-ocean">Apply</span>
+   178→        </span>
+   179→        <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+   180→          One-click apply
+   181→        </span>
+   182→      </div>
+   183→    </a>
+   184→  );
+   185→}
+   186→
+   187→function Hero({ onLaunch }: { onLaunch: () => void }) {
+   188→  return (
+   189→    <section className="relative overflow-hidden bg-mesh-ocean">
+   190→      <div className="absolute inset-0 bg-grid-ocean opacity-50" />
+   191→      <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-sky/30 blur-3xl" />
+   192→      <div className="absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-ocean/20 blur-3xl" />
+   193→
+   194→      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-24 lg:pb-28">
+   195→        <div className="grid lg:grid-cols-2 gap-12 items-center">
+   196→          <motion.div
+   197→            initial={{ opacity: 0, y: 20 }}
+   198→            animate={{ opacity: 1, y: 0 }}
+   199→            transition={{ duration: 0.5 }}
+   200→          >
+   201→            <Badge className="mb-5 bg-shore/40 text-ocean border-shore/60 hover:bg-shore/50">
+   202→              <Sparkles className="h-3 w-3" />
+   203→              Built for Pakistan, South Asia & beyond
+   204→            </Badge>
+   205→            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] text-foreground">
+   206→              Apply to any job in{" "}
+   207→              <span className="text-gradient-ocean">one click.</span>
+   208→              <br />
+   209→              Not one hundred.
+   210→            </h1>
+   211→            <p className="mt-6 text-lg text-muted-foreground max-w-xl">
+   212→              Upload your resume once. QuickApply parses it with AI and auto-fills every
+   213→              job application form on LinkedIn, Indeed, Rozee.pk, Mustakbil & more —
+   214→              while you stay fully in control.
+   215→            </p>
+   216→            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+   217→              <Button size="lg" className="bg-ocean hover:bg-ocean/90 shadow-ocean" onClick={onLaunch}>
+   218→                <Chrome className="mr-2 h-5 w-5" />
+   219→                Add to Chrome — Free
+   220→              </Button>
+   221→              <Button size="lg" variant="outline" onClick={onLaunch}>
+   222→                Try the live demo
+   223→                <ArrowRight className="ml-2 h-4 w-4" />
+   224→              </Button>
+   225→            </div>
+   226→            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
+   227→              <span className="inline-flex items-center gap-1.5">
+   228→                <CheckCircle2 className="h-4 w-4 text-ocean" /> No auto-apply bots
+   229→              </span>
+   230→              <span className="inline-flex items-center gap-1.5">
+   231→                <CheckCircle2 className="h-4 w-4 text-ocean" /> Local portal support
+   232→              </span>
+   233→              <span className="inline-flex items-center gap-1.5">
+   234→                <CheckCircle2 className="h-4 w-4 text-ocean" /> Encrypted on-device
+   235→              </span>
+   236→            </div>
+   237→
+   238→            <div className="mt-10 grid grid-cols-3 gap-4 max-w-md">
+   239→              <Stat value={4.2} suffix=" hrs" label="saved / week" decimals={1} />
+   240→              <Stat value={20} suffix="+" label="sites supported" />
+   241→              <Stat value={96} suffix="%" label="fill accuracy" />
+   242→            </div>
+   243→          </motion.div>
+   244→
+   245→          <motion.div
+   246→            initial={{ opacity: 0, scale: 0.96 }}
+   247→            animate={{ opacity: 1, scale: 1 }}
+   248→            transition={{ duration: 0.5, delay: 0.1 }}
+   249→            className="relative"
+   250→          >
+   251→            <HeroVisual />
+   252→          </motion.div>
+   253→        </div>
+   254→      </div>
+   255→    </section>
+   256→  );
+   257→}
+   258→
+   259→function Stat({ value, suffix, label, decimals = 0 }: { value: number; suffix?: string; label: string; decimals?: number }) {
+   260→  const [display, setDisplay] = useState(0);
+   261→  const ref = useRef<HTMLDivElement>(null);
+   262→  const started = useRef(false);
+   263→
+   264→  useEffect(() => {
+   265→    const el = ref.current;
+   266→    if (!el) return;
+   267→    const obs = new IntersectionObserver(
+   268→      (entries) => {
+   269→        if (entries[0].isIntersecting && !started.current) {
+   270→          started.current = true;
+   271→          const duration = 1400;
+   272→          const start = performance.now();
+   273→          const tick = (now: number) => {
+   274→            const p = Math.min((now - start) / duration, 1);
+   275→            // ease-out cubic
+   276→            const eased = 1 - Math.pow(1 - p, 3);
+   277→            setDisplay(value * eased);
+   278→            if (p < 1) requestAnimationFrame(tick);
+   279→          };
+   280→          requestAnimationFrame(tick);
+   281→        }
+   282→      },
+   283→      { threshold: 0.4 },
+   284→    );
+   285→    obs.observe(el);
+   286→    return () => obs.disconnect();
+   287→  }, [value]);
+   288→
+   289→  const formatted = display.toLocaleString("en-US", {
+   290→    minimumFractionDigits: decimals,
+   291→    maximumFractionDigits: decimals,
+   292→  });
+   293→
+   294→  return (
+   295→    <div ref={ref}>
+   296→      <div className="text-2xl font-bold text-foreground tabular-nums">
+   297→        {formatted}
+   298→        <span className="text-ocean">{suffix}</span>
+   299→      </div>
+   300→      <div className="text-xs text-muted-foreground mt-0.5">{label}</div>
+   301→    </div>
+   302→  );
+   303→}
+   304→
+   305→function HeroVisual() {
+   306→  return (
+   307→    <div className="relative">
+   308→      <div className="absolute -inset-4 bg-gradient-to-tr from-ocean/20 via-sky/20 to-foam/40 rounded-3xl blur-2xl" />
+   309→      <div className="relative glass-card rounded-2xl p-3 shadow-ocean-lg">
+   310→        {/* Browser chrome */}
+   311→        <div className="flex items-center gap-2 px-2 pb-2">
+   312→          <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+   313→          <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+   314→          <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+   315→          <div className="ml-2 flex-1 h-7 rounded-md bg-white/70 dark:bg-white/5 border border-border flex items-center px-3 text-xs text-muted-foreground">
+   316→            <Globe className="h-3 w-3 mr-1.5" />
+   317→            careers.careem.com/apply
+   318→          </div>
+   319→        </div>
+   320→        {/* Form mockup */}
+   321→        <div className="rounded-xl bg-white dark:bg-card border border-border p-4 space-y-3">
+   322→          <div className="flex items-center justify-between mb-1">
+   323→            <div className="flex items-center gap-2">
+   324→              <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-ocean to-sky grid place-items-center">
+   325→                <Zap className="h-3.5 w-3.5 text-white" fill="white" />
+   326→              </div>
+   327→              <span className="text-xs font-semibold">QuickApply · auto-fill ready</span>
+   328→            </div>
+   329→            <Badge className="bg-emerald-500/15 text-emerald-700 border-emerald-500/20">
+   330→              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live
+   331→            </Badge>
+   332→          </div>
+   333→
+   334→          <AutoFillRow label="Full name" value="Ayesha Khan" filled delay={0.2} />
+   335→          <AutoFillRow label="Email" value="ayesha.khan@example.com" filled delay={0.35} />
+   336→          <AutoFillRow label="Phone" value="+92 300 1234567" filled delay={0.5} />
+   337→          <AutoFillRow label="Address" value="Lahore, Pakistan" filled delay={0.65} />
+   338→
+   339→          <div className="flex items-center justify-between pt-1">
+   340→            <div className="text-[11px] text-muted-foreground">
+   341→              <CheckCircle2 className="inline h-3 w-3 mr-1 text-emerald-500" />
+   342→              4 of 7 fields filled · resume attached
+   343→            </div>
+   344→            <motion.div
+   345→              animate={{ scale: [1, 1.04, 1] }}
+   346→              transition={{ duration: 2, repeat: Infinity }}
+   347→              className="text-[11px] font-semibold text-ocean"
+   348→            >
+   349→              Ctrl+Shift+F
+   350→            </motion.div>
+   351→          </div>
+   352→        </div>
+   353→      </div>
+   354→
+   355→      {/* Floating card */}
+   356→      <motion.div
+   357→        animate={{ y: [0, -10, 0] }}
+   358→        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+   359→        className="absolute -bottom-6 -left-6 hidden sm:block glass-card rounded-xl p-3 shadow-ocean w-44"
+   360→      >
+   361→        <div className="flex items-center gap-2">
+   362→          <div className="h-8 w-8 rounded-lg bg-emerald-500/15 grid place-items-center">
+   363→            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+   364→          </div>
+   365→          <div>
+   366→            <div className="text-xs font-semibold">Application sent</div>
+   367→            <div className="text-[10px] text-muted-foreground">Saved 3 min 12 sec</div>
+   368→          </div>
+   369→        </div>
+   370→      </motion.div>
+   371→    </div>
+   372→  );
+   373→}
+   374→
+   375→function AutoFillRow({ label, value, filled, delay = 0 }: { label: string; value: string; filled?: boolean; delay?: number }) {
+   376→  return (
+   377→    <motion.div
+   378→      initial={{ opacity: 0, x: -10 }}
+   379→      animate={{ opacity: 1, x: 0 }}
+   380→      transition={{ delay, duration: 0.4 }}
+   381→      className={`rounded-lg px-3 py-2 border ${
+   382→        filled ? "border-emerald-400/60 bg-emerald-50/60 dark:bg-emerald-500/5" : "border-border"
+   383→      }`}
+   384→    >
+   385→      <div className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</div>
+   386→      <div className="text-sm font-medium text-foreground flex items-center justify-between">
+   387→        <span>{value}</span>
+   388→        {filled && (
+   389→          <motion.span
+   390→            initial={{ scale: 0 }}
+   391→            animate={{ scale: 1 }}
+   392→            transition={{ delay: delay + 0.2, type: "spring" }}
+   393→            className="text-emerald-500"
+   394→          >
+   395→            <CheckCircle2 className="h-3.5 w-3.5" />
+   396→          </motion.span>
+   397→        )}
+   398→      </div>
+   399→    </motion.div>
+   400→  );
+   401→}
+   402→
+   403→function LogoStrip() {
+   404→  return (
+   405→    <section className="border-y border-border bg-secondary/30">
+   406→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+   407→        {/* Trust bar */}
+   408→        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 mb-8 pb-8 border-b border-border">
+   409→          <TrustItem value="12,400+" label="active job seekers" />
+   410→          <Divider />
+   411→          <TrustItem value="180k+" label="forms auto-filled" />
+   412→          <Divider />
+   413→          <div className="flex items-center gap-2">
+   414→            <div className="flex">
+   415→              {[0, 1, 2, 3, 4].map((i) => (
+   416→                <Star key={i} className="h-4 w-4 text-amber-400" fill="currentColor" />
+   417→              ))}
+   418→            </div>
+   419→            <div>
+   420→              <div className="text-sm font-bold text-foreground">4.8/5</div>
+   421→              <div className="text-[11px] text-muted-foreground">Chrome Store</div>
+   422→            </div>
+   423→          </div>
+   424→          <Divider />
+   425→          <TrustItem value="98%" label="would recommend" />
+   426→        </div>
+   427→
+   428→        <p className="text-center text-xs uppercase tracking-[0.18em] text-muted-foreground mb-5">
+   429→          Auto-fills forms on the portals you actually use
+   430→        </p>
+   431→        <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+   432→          {SITES.map((s) => (
+   433→            <div key={s.name} className="flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity">
+   434→              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: s.color }} />
+   435→              <span className="text-sm font-semibold text-foreground/80">{s.name}</span>
+   436→            </div>
+   437→          ))}
+   438→        </div>
+   439→      </div>
+   440→    </section>
+   441→  );
+   442→}
+   443→
+   444→function TrustItem({ value, label }: { value: string; label: string }) {
+   445→  return (
+   446→    <div className="text-center">
+   447→      <div className="text-lg font-bold text-foreground">{value}</div>
+   448→      <div className="text-[11px] text-muted-foreground">{label}</div>
+   449→    </div>
+   450→  );
+   451→}
+   452→
+   453→function Divider() {
+   454→  return <span className="hidden sm:block h-8 w-px bg-border" />;
+   455→}
+   456→
+   457→interface ActivityItem {
+   458→  id: string;
+   459→  name: string;
+   460→  role: string;
+   461→  company: string;
+   462→  site: string;
+   463→  color: string;
+   464→  time: string;
+   465→}
+   466→
+   467→const FALLBACK_ACTIVITIES: ActivityItem[] = [
+   468→  { id: "f1", name: "Hamza S.", role: "Software Engineer", company: "Careem", site: "LinkedIn", color: "#0A66C2", time: "just now" },
+   469→  { id: "f2", name: "Sana K.", role: "Marketing Lead", company: "Dastgyr", site: "Rozee.pk", color: "#E84B3C", time: "just now" },
+   470→  { id: "f3", name: "Bilal A.", role: "Full-Stack Developer", company: "Foodpanda", site: "Indeed", color: "#003A9B", time: "just now" },
+   471→  { id: "f4", name: "Ayesha M.", role: "Product Designer", company: "Bykea", site: "Mustakbil", color: "#0077B6", time: "just now" },
+   472→  { id: "f5", name: "Usman R.", role: "Data Analyst", company: "Afiniti", site: "Bayt", color: "#0a3d62", time: "just now" },
+   473→];
+   474→
+   475→function LiveActivity() {
+   476→  const [activities, setActivities] = useState<ActivityItem[]>(FALLBACK_ACTIVITIES);
+   477→  const [visible, setVisible] = useState(0);
+   478→  const [connected, setConnected] = useState(false);
+   479→
+   480→  useEffect(() => {
+   481→    // Try to connect to the live WebSocket mini-service
+   482→    let socket: { close: () => void } | null = null;
+   483→    let interval: ReturnType<typeof setInterval> | null = null;
+   484→    let cancelled = false;
+   485→
+   486→    try {
+   487→      const io = (window as unknown as { io?: unknown }).io;
+   488→      if (typeof io === "function") {
+   489→        // socket.io client would be loaded via script; here we use the global
+   490→      }
+   491→    } catch {
+   492→      // ignore
+   493→    }
+   494→
+   495→    // Use a lightweight approach: dynamically import socket.io-client if available,
+   496→    // otherwise fall back to interval rotation of fallback data.
+   497→    import("socket.io-client")
+   498→      .then(({ io }) => {
+   499→        if (cancelled) return;
+   500→        socket = io("/?XTransformPort=3004", { path: "/", transports: ["websocket", "polling"] });
+   501→        (socket as unknown as { on: (e: string, cb: (...a: unknown[]) => void) => void }).on("connect", () => setConnected(true));
+   502→        (socket as unknown as { on: (e: string, cb: (...a: unknown[]) => void) => void }).on("disconnect", () => setConnected(false));
+   503→        (socket as unknown as { on: (e: string, cb: (...a: unknown[]) => void) => void }).on("recent-activities", (acts: unknown) => {
+   504→          if (Array.isArray(acts) && acts.length) {
+   505→            setActivities(acts as ActivityItem[]);
+   506→            setVisible(0);
+   507→          }
+   508→        });
+   509→        (socket as unknown as { on: (e: string, cb: (...a: unknown[]) => void) => void }).on("new-activity", (act: unknown) => {
+   510→          setActivities((prev) => [act as ActivityItem, ...prev].slice(0, 10));
+   511→          setVisible(0);
+   512→        });
+   513→      })
+   514→      .catch(() => {
+   515→        // socket.io-client not available — use fallback rotation
+   516→      });
+   517→
+   518→    // Rotate visible activity every 3s (works for both live and fallback)
+   519→    interval = setInterval(() => {
+   520→      setVisible((v) => (v + 1) % Math.min(activities.length, 5));
+   521→    }, 3000);
+   522→
+   523→    return () => {
+   524→      cancelled = true;
+   525→      if (interval) clearInterval(interval);
+   526→      if (socket) (socket as { close: () => void }).close();
+   527→    };
+   528→  }, [activities.length]);
+   529→
+   530→  const current = activities[visible] ?? FALLBACK_ACTIVITIES[0];
+   531→
+   532→  return (
+   533→    <section className="py-10 border-b border-border bg-gradient-to-b from-secondary/20 to-background">
+   534→      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+   535→        <div className="flex items-center justify-center gap-2 mb-5">
+   536→          <span className="relative flex h-2.5 w-2.5">
+   537→            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+   538→            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+   539→          </span>
+   540→          <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground font-medium">
+   541→            {connected ? "Live now · real applications being filled" : "Live now · recent applications"}
+   542→          </p>
+   543→          {connected && (
+   544→            <Badge variant="outline" className="border-emerald-500/30 text-emerald-600 bg-emerald-500/5 text-[9px] ml-1">
+   545→              <span className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse mr-1" /> LIVE
+   546→            </Badge>
+   547→          )}
+   548→        </div>
+   549→
+   550→        <div className="relative h-20 sm:h-16 max-w-2xl mx-auto">
+   551→          <AnimatePresence mode="wait">
+   552→            <motion.div
+   553→              key={current?.id ?? visible}
+   554→              initial={{ opacity: 0, y: 14 }}
+   555→              animate={{ opacity: 1, y: 0 }}
+   556→              exit={{ opacity: 0, y: -14 }}
+   557→              transition={{ duration: 0.5 }}
+   558→              className="absolute inset-0"
+   559→            >
+   560→              <div className="flex items-center gap-3 rounded-xl glass-card border border-border px-4 py-3 shadow-ocean">
+   561→                <div
+   562→                  className="h-9 w-9 rounded-full grid place-items-center text-white text-xs font-bold shrink-0"
+   563→                  style={{ backgroundColor: current?.color ?? "#0077B6" }}
+   564→                >
+   565→                  {(current?.name ?? "QA").slice(0, 2).toUpperCase()}
+   566→                </div>
+   567→                <div className="flex-1 min-w-0 text-left">
+   568→                  <div className="text-sm font-medium truncate">
+   569→                    <span className="text-ocean">{current?.name}</span> just auto-filled a{" "}
+   570→                    <span className="font-semibold">{current?.role}</span> application
+   571→                  </div>
+   572→                  <div className="text-xs text-muted-foreground truncate">
+   573→                    at {current?.company} via {current?.site} · {current?.time ?? "just now"}
+   574→                  </div>
+   575→                </div>
+   576→                <Badge variant="outline" className="bg-emerald-500/10 text-emerald-700 border-emerald-500/20 text-[10px] hidden sm:flex shrink-0">
+   577→                  <CheckCircle2 className="h-2.5 w-2.5 mr-0.5" /> Sent
+   578→                </Badge>
+   579→              </div>
+   580→            </motion.div>
+   581→          </AnimatePresence>
+   582→        </div>
+   583→
+   584→        <p className="text-center text-xs text-muted-foreground mt-4">
+   585→          Join <span className="font-semibold text-foreground">12,400+ job seekers</span> saving hours every week with QuickApply
+   586→        </p>
+   587→      </div>
+   588→    </section>
+   589→  );
+   590→}
+   591→
+   592→function Problem() {
+   593→  const pains = [
+   594→    {
+   595→      icon: Clock,
+   596→      title: "Same data, retyped 100 times",
+   597→      body: "Every portal asks for your name, email, phone, education & work history. Retyping it all wastes hours every single week.",
+   598→    },
+   599→    {
+   600→      icon: X,
+   601→      title: "Typos when you rush",
+   602→      body: "Apply fast = mistakes. A single digit off in your phone number and a recruiter can never reach you back.",
+   603→    },
+   604→    {
+   605→      icon: Layers,
+   606→      title: "Local portals ignored",
+   607→      body: "International auto-fill tools skip Rozee.pk, Mustakbil & Indeed Pakistan entirely. You're back to typing manually.",
+   608→    },
+   609→  ];
+   610→  return (
+   611→    <section className="py-20 lg:py-24">
+   612→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   613→        <SectionHeader
+   614→          eyebrow="The problem"
+   615→          title="Job hunting feels like data entry, not job hunting."
+   616→          subtitle="The average active applicant fills 12-20 forms a week. That's not networking — that's keyboard gymnastics."
+   617→        />
+   618→        <div className="mt-12 grid md:grid-cols-3 gap-6">
+   619→          {pains.map((p, i) => (
+   620→            <motion.div
+   621→              key={p.title}
+   622→              initial={{ opacity: 0, y: 16 }}
+   623→              whileInView={{ opacity: 1, y: 0 }}
+   624→              viewport={{ once: true, margin: "-80px" }}
+   625→              transition={{ duration: 0.4, delay: i * 0.1 }}
+   626→            >
+   627→              <Card className="h-full border-border hover:border-ocean/40 hover:shadow-ocean transition-all">
+   628→                <CardContent className="pt-6">
+   629→                  <div className="h-11 w-11 rounded-xl bg-ocean/10 grid place-items-center mb-4">
+   630→                    <p.icon className="h-5 w-5 text-ocean" />
+   631→                  </div>
+   632→                  <h3 className="font-semibold text-lg text-foreground">{p.title}</h3>
+   633→                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.body}</p>
+   634→                </CardContent>
+   635→              </Card>
+   636→            </motion.div>
+   637→          ))}
+   638→        </div>
+   639→      </div>
+   640→    </section>
+   641→  );
+   642→}
+   643→
+   644→function HowItWorks() {
+   645→  const steps = [
+   646→    {
+   647→      n: "01",
+   648→      icon: FileText,
+   649→      title: "Upload your resume",
+   650→      body: "Drag a PDF or DOCX into QuickApply. Our AI parses your name, contact info, education, experience & skills in seconds.",
+   651→    },
+   652→    {
+   653→      n: "02",
+   654→      icon: MousePointerClick,
+   655→      title: "Review & confirm",
+   656→      body: "Quickly verify the extracted data in a clean editor. Save multiple profiles for different roles — SWE, marketing, etc.",
+   657→    },
+   658→    {
+   659→      n: "03",
+   660→      icon: Zap,
+   661→      title: "Hit one-click fill",
+   662→      body: "Open any job application form, click the QuickApply toolbar icon (or Ctrl+Shift+F). Fields fill instantly with green highlights.",
+   663→    },
+   664→    {
+   665→      n: "04",
+   666→      icon: BarChart3,
+   667→      title: "Track everything",
+   668→      body: "QuickApply logs every application, reminds you to follow up, and shows response rates so you know what's working.",
+   669→    },
+   670→  ];
+   671→  return (
+   672→    <section id="how" className="py-20 lg:py-24 bg-secondary/30 border-y border-border">
+   673→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   674→        <SectionHeader
+   675→          eyebrow="How it works"
+   676→          title="From resume to applied in under 10 seconds."
+   677→          subtitle="No bots, no spam. QuickApply fills the form — you review and hit submit."
+   678→        />
+   679→        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+   680→          {steps.map((s, i) => (
+   681→            <motion.div
+   682→              key={s.n}
+   683→              initial={{ opacity: 0, y: 16 }}
+   684→              whileInView={{ opacity: 1, y: 0 }}
+   685→              viewport={{ once: true, margin: "-80px" }}
+   686→              transition={{ duration: 0.4, delay: i * 0.08 }}
+   687→            >
+   688→              <Card className="h-full relative overflow-hidden hover:shadow-ocean transition-all">
+   689→                <div className="absolute -top-3 -right-3 text-7xl font-black text-ocean/5 select-none">
+   690→                  {s.n}
+   691→                </div>
+   692→                <CardContent className="pt-6 relative">
+   693→                  <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-ocean to-sky grid place-items-center mb-4 shadow-ocean">
+   694→                    <s.icon className="h-5 w-5 text-white" />
+   695→                  </div>
+   696→                  <h3 className="font-semibold text-foreground">{s.title}</h3>
+   697→                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.body}</p>
+   698→                </CardContent>
+   699→              </Card>
+   700→            </motion.div>
+   701→          ))}
+   702→        </div>
+   703→      </div>
+   704→    </section>
+   705→  );
+   706→}
+   707→
+   708→function Features() {
+   709→  const features = [
+   710→    { icon: Sparkles, title: "AI resume parsing", body: "Claude-powered extraction of structured data from PDF & DOCX resumes — with a manual review step." },
+   711→    { icon: Layers, title: "Multiple profiles", body: "Maintain a Software Engineer profile and a Marketing profile. Switch with one click before applying." },
+   712→    { icon: FileText, title: "Cover letter auto-fill", body: "Saved templates with AI tailoring per job description. No more rewriting from scratch." },
+   713→    { icon: MousePointerClick, title: "Field-by-field highlight", body: "Filled fields glow green so you can review at a glance. Undo or clear with one click." },
+   714→    { icon: Globe, title: "Local portal support", body: "Rozee.pk, Mustakbil, Bayt & Indeed Pakistan work out of the box — not just LinkedIn." },
+   715→    { icon: Target, title: "Duplicate application warning", body: "QuickApply warns you if you've already applied to the same job, so you never apply twice." },
+   716→    { icon: ShieldCheck, title: "Local encryption", body: "Your resume & personal data stay encrypted on your device. We never sell data, ever." },
+   717→    { icon: Bell, title: "Follow-up reminders", body: "No reply in a week? QuickApply nudges you to send a polite follow-up automatically." },
+   718→    { icon: Languages, title: "Urdu & English labels", body: "Detects form labels in both Urdu and English for accurate field mapping on local portals." },
+   719→  ];
+   720→  return (
+   721→    <section id="features" className="py-20 lg:py-24">
+   722→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   723→        <SectionHeader
+   724→          eyebrow="Features"
+   725→          title="Everything an active applicant actually needs."
+   726→          subtitle="Phase 1 essentials plus the smart detection & multi-profile superpowers from Phase 2."
+   727→        />
+   728→        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+   729→          {features.map((f, i) => (
+   730→            <motion.div
+   731→              key={f.title}
+   732→              initial={{ opacity: 0, y: 16 }}
+   733→              whileInView={{ opacity: 1, y: 0 }}
+   734→              viewport={{ once: true, margin: "-80px" }}
+   735→              transition={{ duration: 0.35, delay: (i % 3) * 0.08 }}
+   736→            >
+   737→              <Card className="h-full group hover:border-ocean/40 hover:-translate-y-0.5 transition-all duration-300">
+   738→                <CardContent className="pt-6">
+   739→                  <div className="h-11 w-11 rounded-xl bg-ocean/10 grid place-items-center mb-4 group-hover:bg-ocean group-hover:text-white transition-colors">
+   740→                    <f.icon className="h-5 w-5 text-ocean group-hover:text-white transition-colors" />
+   741→                  </div>
+   742→                  <h3 className="font-semibold text-foreground">{f.title}</h3>
+   743→                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{f.body}</p>
+   744→                </CardContent>
+   745→              </Card>
+   746→            </motion.div>
+   747→          ))}
+   748→        </div>
+   749→      </div>
+   750→    </section>
+   751→  );
+   752→}
+   753→
+   754→function ExtensionDemo() {
+   755→  return (
+   756→    <section id="compat" className="py-20 lg:py-24 bg-gradient-to-b from-secondary/30 to-background border-y border-border">
+   757→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   758→        <div className="grid lg:grid-cols-2 gap-12 items-center">
+   759→          <motion.div
+   760→            initial={{ opacity: 0, x: -20 }}
+   761→            whileInView={{ opacity: 1, x: 0 }}
+   762→            viewport={{ once: true }}
+   763→            transition={{ duration: 0.5 }}
+   764→          >
+   765→            <Badge className="mb-4 bg-sky/15 text-ocean border-sky/30">
+   766→              <Sparkles className="h-3 w-3" /> Live detection
+   767→            </Badge>
+   768→            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+   769→              Detects the right field — even when the form gets weird.
+   770→            </h2>
+   771→            <p className="mt-4 text-muted-foreground leading-relaxed">
+   772→              QuickApply's detection engine understands text inputs, dropdowns, radio buttons, checkboxes,
+   773→              file uploads and even multi-section ATS forms (Greenhouse, Lever). It maps fields by label
+   774→              text, placeholder, aria attributes and surrounding context — so the right data lands in the
+   775→              right box, every time.
+   776→            </p>
+   777→            <ul className="mt-6 space-y-3">
+   778→              {[
+   779→                "Smart label matching in English + Urdu",
+   780→                "Auto-attaches resume & cover letter files",
+   781→                "Custom field mapping when auto-detect misses",
+   782→                "Per-site templates for top portals",
+   783→              ].map((t) => (
+   784→                <li key={t} className="flex items-start gap-2.5">
+   785→                  <CheckCircle2 className="h-5 w-5 text-ocean shrink-0 mt-0.5" />
+   786→                  <span className="text-sm text-foreground/90">{t}</span>
+   787→                </li>
+   788→              ))}
+   789→            </ul>
+   790→          </motion.div>
+   791→          <DetectionVisual />
+   792→        </div>
+   793→      </div>
+   794→    </section>
+   795→  );
+   796→}
+   797→
+   798→function DetectionVisual() {
+   799→  return (
+   800→    <motion.div
+   801→      initial={{ opacity: 0, x: 20 }}
+   802→      whileInView={{ opacity: 1, x: 0 }}
+   803→      viewport={{ once: true }}
+   804→      transition={{ duration: 0.5 }}
+   805→      className="relative"
+   806→    >
+   807→      <div className="glass-card rounded-2xl p-4 shadow-ocean-lg">
+   808→        <div className="rounded-xl bg-card border border-border p-4 space-y-3">
+   809→          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+   810→            Detected fields on this page
+   811→          </div>
+   812→          {[
+   813→            { label: "Full name", type: "text", status: "matched" },
+   814→            { label: "Email address", type: "email", status: "matched" },
+   815→            { label: "Years of experience", type: "select", status: "matched" },
+   816→            { label: "Willing to relocate?", type: "radio", status: "matched" },
+   817→            { label: "Resume (PDF)", type: "file", status: "matched" },
+   818→            { label: "Cover letter", type: "file", status: "optional" },
+   819→          ].map((f, i) => (
+   820→            <motion.div
+   821→              key={f.label}
+   822→              initial={{ opacity: 0 }}
+   823→              whileInView={{ opacity: 1 }}
+   824→              viewport={{ once: true }}
+   825→              transition={{ delay: 0.15 + i * 0.1 }}
+   826→              className="flex items-center justify-between rounded-lg border border-border px-3 py-2 bg-secondary/30"
+   827→            >
+   828→              <div className="flex items-center gap-2.5">
+   829→                <span
+   830→                  className={`h-2 w-2 rounded-full ${
+   831→                    f.status === "matched" ? "bg-emerald-500" : "bg-amber-400"
+   832→                  }`}
+   833→                />
+   834→                <span className="text-sm font-medium">{f.label}</span>
+   835→                <Badge variant="outline" className="text-[10px] py-0">{f.type}</Badge>
+   836→              </div>
+   837→              <span className={`text-xs ${f.status === "matched" ? "text-emerald-600" : "text-amber-600"}`}>
+   838→                {f.status === "matched" ? "auto-filled" : "skipped"}
+   839→              </span>
+   840→            </motion.div>
+   841→          ))}
+   842→        </div>
+   843→      </div>
+   844→    </motion.div>
+   845→  );
+   846→}
+   847→
+   848→function Comparison() {
+   849→  const rows = [
+   850→    { feature: "LinkedIn support", qa: true, simplify: true, lazy: true, teal: true },
+   851→    { feature: "Indeed support", qa: true, simplify: true, lazy: true, teal: true },
+   852→    { feature: "Rozee.pk support", qa: true, simplify: false, lazy: false, teal: false },
+   853→    { feature: "Mustakbil support", qa: true, simplify: false, lazy: false, teal: false },
+   854→    { feature: "AI resume parsing", qa: true, simplify: true, lazy: false, teal: true },
+   855→    { feature: "Multiple profiles", qa: true, simplify: true, lazy: false, teal: true },
+   856→    { feature: "Auto-fill (not auto-apply)", qa: true, simplify: true, lazy: false, teal: true },
+   857→    { feature: "Local payment options", qa: true, simplify: false, lazy: false, teal: false },
+   858→    { feature: "Affordable local pricing", qa: true, simplify: false, lazy: false, teal: false },
+   859→  ];
+   860→  return (
+   861→    <section className="py-20 lg:py-24">
+   862→      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+   863→        <SectionHeader
+   864→          eyebrow="Why QuickApply"
+   865→          title="The only auto-filler built for local job portals."
+   866→          subtitle="International tools skip Rozee.pk & Mustakbil. We don't."
+   867→        />
+   868→        <Card className="mt-12 overflow-hidden border-border">
+   869→          <div className="overflow-x-auto scrollbar-thin">
+   870→            <table className="w-full text-sm">
+   871→              <thead>
+   872→                <tr className="border-b border-border bg-secondary/40">
+   873→                  <th className="text-left px-5 py-4 font-semibold">Capability</th>
+   874→                  <th className="px-5 py-4 font-semibold text-ocean">
+   875→                    <div className="flex flex-col items-center">
+   876→                      <span>QuickApply</span>
+   877→                      <span className="text-[10px] font-normal text-muted-foreground">built here</span>
+   878→                    </div>
+   879→                  </th>
+   880→                  <th className="px-5 py-4 font-semibold text-muted-foreground">Simplify</th>
+   881→                  <th className="px-5 py-4 font-semibold text-muted-foreground">LazyApply</th>
+   882→                  <th className="px-5 py-4 font-semibold text-muted-foreground">Teal</th>
+   883→                </tr>
+   884→              </thead>
+   885→              <tbody>
+   886→                {rows.map((r, i) => (
+   887→                  <tr key={r.feature} className={i % 2 ? "bg-secondary/20" : ""}>
+   888→                    <td className="px-5 py-3 font-medium">{r.feature}</td>
+   889→                    <td className="px-5 py-3 text-center">
+   890→                      <Cell ok={r.qa} highlight />
+   891→                    </td>
+   892→                    <td className="px-5 py-3 text-center"><Cell ok={r.simplify} /></td>
+   893→                    <td className="px-5 py-3 text-center"><Cell ok={r.lazy} /></td>
+   894→                    <td className="px-5 py-3 text-center"><Cell ok={r.teal} /></td>
+   895→                  </tr>
+   896→                ))}
+   897→              </tbody>
+   898→            </table>
+   899→          </div>
+   900→        </Card>
+   901→      </div>
+   902→    </section>
+   903→  );
+   904→}
+   905→
+   906→function Cell({ ok, highlight }: { ok: boolean; highlight?: boolean }) {
+   907→  return ok ? (
+   908→    <span
+   909→      className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
+   910→        highlight ? "bg-ocean text-white" : "bg-emerald-500/15 text-emerald-600"
+   911→      }`}
+   912→    >
+   913→      <CheckCircle2 className="h-3.5 w-3.5" />
+   914→    </span>
+   915→  ) : (
+   916→    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-muted text-muted-foreground">
+   917→      <X className="h-3.5 w-3.5" />
+   918→    </span>
+   919→  );
+   920→}
+   921→
+   922→function Pricing({ onLaunch }: { onLaunch: () => void }) {
+   923→  const plans = [
+   924→    {
+   925→      name: "Free",
+   926→      price: "$0",
+   927→      period: "forever",
+   928→      tagline: "For getting started",
+   929→      features: ["1 resume profile", "Basic auto-fill", "Top 3 sites supported", "Local encryption", "Community support"],
+   930→      cta: "Get started free",
+   931→      highlight: false,
+   932→    },
+   933→    {
+   934→      name: "Pro",
+   935→      price: "$6",
+   936→      period: "/month",
+   937→      tagline: "For active job seekers",
+   938→      features: ["Unlimited profiles", "AI resume tailoring", "All supported sites", "Application tracking", "Follow-up reminders", "Cover letter templates", "Chrome sync across devices"],
+   939→      cta: "Start 14-day trial",
+   940→      highlight: true,
+   941→    },
+   942→    {
+   943→      name: "Career Coach",
+   944→      price: "$18",
+   945→      period: "/month",
+   946→      tagline: "For coaches & teams",
+   947→      features: ["Everything in Pro", "Manage 10+ client profiles", "Bulk application assistant", "Shared templates", "Priority support", "Coach dashboard"],
+   948→      cta: "Talk to us",
+   949→      highlight: false,
+   950→    },
+   951→  ];
+   952→  return (
+   953→    <section id="pricing" className="py-20 lg:py-24 bg-secondary/30 border-y border-border">
+   954→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+   955→        <SectionHeader
+   956→          eyebrow="Pricing"
+   957→          title="Free to start. Affordable to upgrade."
+   958→          subtitle="Pay in USD via Stripe, or locally via JazzCash & EasyPaisa. Cancel anytime."
+   959→        />
+   960→        <div className="mt-12 grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+   961→          {plans.map((p) => (
+   962→            <Card
+   963→              key={p.name}
+   964→              className={`relative flex flex-col ${
+   965→                p.highlight ? "border-ocean shadow-ocean-lg ring-2 ring-ocean/20 scale-[1.02]" : "border-border"
+   966→              }`}
+   967→            >
+   968→              {p.highlight && (
+   969→                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+   970→                  <Badge className="bg-ocean text-white border-ocean shadow-ocean">
+   971→                    <Star className="h-3 w-3" /> Most popular
+   972→                  </Badge>
+   973→                </div>
+   974→              )}
+   975→              <CardContent className="pt-6 flex flex-col h-full">
+   976→                <h3 className="font-semibold text-lg">{p.name}</h3>
+   977→                <p className="text-xs text-muted-foreground mt-0.5">{p.tagline}</p>
+   978→                <div className="mt-4 flex items-baseline gap-1">
+   979→                  <span className="text-4xl font-extrabold tracking-tight">{p.price}</span>
+   980→                  <span className="text-sm text-muted-foreground">{p.period}</span>
+   981→                </div>
+   982→                <Separator className="my-5" />
+   983→                <ul className="space-y-2.5 flex-1">
+   984→                  {p.features.map((f) => (
+   985→                    <li key={f} className="flex items-start gap-2.5 text-sm">
+   986→                      <CheckCircle2 className="h-4 w-4 text-ocean shrink-0 mt-0.5" />
+   987→                      <span className="text-foreground/90">{f}</span>
+   988→                    </li>
+   989→                  ))}
+   990→                </ul>
+   991→                <Button
+   992→                  className={`mt-6 w-full ${p.highlight ? "bg-ocean hover:bg-ocean/90" : ""}`}
+   993→                  variant={p.highlight ? "default" : "outline"}
+   994→                  onClick={onLaunch}
+   995→                >
+   996→                  {p.cta}
+   997→                </Button>
+   998→              </CardContent>
+   999→            </Card>
+  1000→          ))}
+  1001→        </div>
+  1002→      </div>
+  1003→    </section>
+  1004→  );
+  1005→}
+  1006→
+  1007→function Testimonials() {
+  1008→  const items = [
+  1009→    {
+  1010→      quote: "I applied to 38 jobs in a week instead of my usual 12. QuickApply filled every Rozee.pk form perfectly. Game changer.",
+  1011→      name: "Hamza Sheikh",
+  1012→      role: "Fresh grad, NED University",
+  1013→      avatar: "HS",
+  1014→    },
+  1015→    {
+  1016→      quote: "As a career coach I manage 12 clients. The Pro tier lets me switch profiles instantly and never mix up a cover letter again.",
+  1017→      name: "Sana Tariq",
+  1018→      role: "Career coach, Lahore",
+  1019→      avatar: "ST",
+  1020→    },
+  1021→    {
+  1022→      quote: "Finally a tool that understands Mustakbil. The Urdu label detection is shockingly good — it caught fields I almost missed.",
+  1023→      name: "Bilal Ahmed",
+  1024→      role: "Full-stack developer",
+  1025→      avatar: "BA",
+  1026→    },
+  1027→  ];
+  1028→  return (
+  1029→    <section className="py-20 lg:py-24">
+  1030→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  1031→        <SectionHeader
+  1032→          eyebrow="Loved by job seekers"
+  1033→          title="Real applicants. Real time saved."
+  1034→          subtitle=""
+  1035→        />
+  1036→        <div className="mt-12 grid md:grid-cols-3 gap-6">
+  1037→          {items.map((t, i) => (
+  1038→            <motion.div
+  1039→              key={t.name}
+  1040→              initial={{ opacity: 0, y: 16 }}
+  1041→              whileInView={{ opacity: 1, y: 0 }}
+  1042→              viewport={{ once: true, margin: "-80px" }}
+  1043→              transition={{ duration: 0.4, delay: i * 0.1 }}
+  1044→            >
+  1045→              <Card className="h-full hover:shadow-ocean transition-all">
+  1046→                <CardContent className="pt-6 flex flex-col h-full">
+  1047→                  <Quote className="h-7 w-7 text-sky/40 mb-3" />
+  1048→                  <p className="text-sm text-foreground/90 leading-relaxed flex-1">"{t.quote}"</p>
+  1049→                  <div className="mt-5 flex items-center gap-3">
+  1050→                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-ocean to-sky grid place-items-center text-white text-xs font-bold">
+  1051→                      {t.avatar}
+  1052→                    </div>
+  1053→                    <div>
+  1054→                      <div className="text-sm font-semibold">{t.name}</div>
+  1055→                      <div className="text-xs text-muted-foreground">{t.role}</div>
+  1056→                    </div>
+  1057→                  </div>
+  1058→                </CardContent>
+  1059→              </Card>
+  1060→            </motion.div>
+  1061→          ))}
+  1062→        </div>
+  1063→      </div>
+  1064→    </section>
+  1065→  );
+  1066→}
+  1067→
+  1068→function FAQ() {
+  1069→  const faqs = [
+  1070→    { q: "Is QuickApply an auto-apply bot?", a: "No. QuickApply auto-fills forms — you always review and hit submit yourself. We never submit applications on your behalf, which keeps your account safe and your applications genuine." },
+  1071→    { q: "Where is my resume data stored?", a: "Your data is encrypted and stored locally on your device by default. Pro users can optionally enable Chrome Sync to mirror profiles across devices. We never sell or share your data." },
+  1072→    { q: "Does it really work on Rozee.pk and Mustakbil?", a: "Yes. Local portal support is our key differentiator. We maintain per-site field templates that we verify regularly, so detection stays accurate even as portals update their layouts." },
+  1073→    { q: "What if a field isn't detected?", a: "You can use the custom field-mapping screen to map any unrecognized field yourself. Your mapping is saved for that site, so next time it just works." },
+  1074→    { q: "Can I pay in PKR via JazzCash or EasyPaisa?", a: "Yes. Alongside Stripe for international users, Pro and Career Coach plans support JazzCash and EasyPaisa for local Pakistani payments." },
+  1075→    { q: "Is there a free plan?", a: "Absolutely. The Free plan includes 1 resume profile, basic auto-fill, and the top 3 supported sites — no time limit, no credit card." },
+  1076→  ];
+  1077→  return (
+  1078→    <section id="faq" className="py-20 lg:py-24 bg-secondary/30 border-y border-border">
+  1079→      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+  1080→        <SectionHeader eyebrow="FAQ" title="Questions, answered." subtitle="" />
+  1081→        <Accordion type="single" collapsible className="mt-10">
+  1082→          {faqs.map((f, i) => (
+  1083→            <AccordionItem key={f.q} value={`item-${i}`} className="border-border">
+  1084→              <AccordionTrigger className="text-left font-medium hover:no-underline">
+  1085→                {f.q}
+  1086→              </AccordionTrigger>
+  1087→              <AccordionContent className="text-muted-foreground leading-relaxed">
+  1088→                {f.a}
+  1089→              </AccordionContent>
+  1090→            </AccordionItem>
+  1091→          ))}
+  1092→        </Accordion>
+  1093→      </div>
+  1094→    </section>
+  1095→  );
+  1096→}
+  1097→
+  1098→function FinalCTA({ onLaunch }: { onLaunch: () => void }) {
+  1099→  return (
+  1100→    <section className="py-20 lg:py-28">
+  1101→      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+  1102→        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ink via-ocean to-sky p-10 sm:p-16 text-center shadow-ocean-lg">
+  1103→          <div className="absolute inset-0 bg-grid-ocean opacity-20" />
+  1104→          <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+  1105→          <div className="relative">
+  1106→            <RefreshCw className="h-10 w-10 text-white/90 mx-auto mb-5" />
+  1107→            <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+  1108→              Stop typing. Start applying.
+  1109→            </h2>
+  1110→            <p className="mt-4 text-white/80 max-w-xl mx-auto">
+  1111→              Install QuickApply, upload your resume, and turn your next 100 applications into 100 clicks.
+  1112→            </p>
+  1113→            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+  1114→              <Button
+  1115→                size="lg"
+  1116→                variant="secondary"
+  1117→                className="bg-white text-ocean hover:bg-foam"
+  1118→                onClick={onLaunch}
+  1119→              >
+  1120→                <Chrome className="mr-2 h-5 w-5" /> Add to Chrome — Free
+  1121→              </Button>
+  1122→              <Button
+  1123→                size="lg"
+  1124→                variant="outline"
+  1125→                className="border-white/40 text-white hover:bg-white/10 hover:text-white"
+  1126→                onClick={onLaunch}
+  1127→              >
+  1128→                Open Dashboard <ArrowRight className="ml-2 h-4 w-4" />
+  1129→              </Button>
+  1130→            </div>
+  1131→          </div>
+  1132→        </div>
+  1133→      </div>
+  1134→    </section>
+  1135→  );
+  1136→}
+  1137→
+  1138→function SiteFooter() {
+  1139→  return (
+  1140→    <footer className="mt-auto bg-ink text-foam/80">
+  1141→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
+  1142→        <div className="grid md:grid-cols-5 gap-8">
+  1143→          <div className="md:col-span-2">
+  1144→            <div className="flex items-center gap-2.5">
+  1145→              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-sky to-foam grid place-items-center">
+  1146→                <Zap className="h-5 w-5 text-ink" fill="currentColor" />
+  1147→              </div>
+  1148→              <span className="text-lg font-bold text-white">
+  1149→                Quick<span className="text-sky">Apply</span>
+  1150→              </span>
+  1151→            </div>
+  1152→            <p className="mt-4 text-sm max-w-xs text-foam/60">
+  1153→              The one-click job application auto-filler built for Pakistan, South Asia & beyond.
+  1154→              Auto-fill, never auto-apply.
+  1155→            </p>
+  1156→            <div className="mt-5 flex gap-2">
+  1157→              <Badge variant="outline" className="border-white/20 text-foam/70">Manifest V3</Badge>
+  1158→              <Badge variant="outline" className="border-white/20 text-foam/70">GDPR-ready</Badge>
+  1159→            </div>
+  1160→          </div>
+  1161→          <FooterCol title="Product" links={["Features", "Pricing", "Compatibility", "Changelog", "Roadmap"]} />
+  1162→          <FooterCol title="Company" links={["About", "Blog", "Careers", "Contact"]} />
+  1163→          <FooterCol title="Legal" links={["Privacy Policy", "Terms", "Data Deletion", "Chrome Store Policy"]} />
+  1164→        </div>
+  1165→        <Separator className="my-8 bg-white/10" />
+  1166→        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-foam/50">
+  1167→          <div>© {new Date().getFullYear()} QuickApply. Built with care for job seekers.</div>
+  1168→          <div className="flex items-center gap-1.5">
+  1169→            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+  1170→            All systems operational
+  1171→          </div>
+  1172→        </div>
+  1173→      </div>
+  1174→    </footer>
+  1175→  );
+  1176→}
+  1177→
+  1178→function FooterCol({ title, links }: { title: string; links: string[] }) {
+  1179→  return (
+  1180→    <div>
+  1181→      <h4 className="text-sm font-semibold text-white mb-3">{title}</h4>
+  1182→      <ul className="space-y-2">
+  1183→        {links.map((l) => (
+  1184→          <li key={l}>
+  1185→            <a href="#" className="text-sm text-foam/60 hover:text-foam transition-colors">
+  1186→              {l}
+  1187→            </a>
+  1188→          </li>
+  1189→        ))}
+  1190→      </ul>
+  1191→    </div>
+  1192→  );
+  1193→}
+  1194→
+  1195→function SectionHeader({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) {
+  1196→  return (
+  1197→    <div className="text-center max-w-2xl mx-auto">
+  1198→      <Badge variant="outline" className="mb-3 border-ocean/30 text-ocean bg-ocean/5">
+  1199→        {eyebrow}
+  1200→      </Badge>
+  1201→      <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{title}</h2>
+  1202→      {subtitle && <p className="mt-3 text-muted-foreground">{subtitle}</p>}
+  1203→    </div>
+  1204→  );
+  1205→}
+  1206→

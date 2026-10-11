@@ -1,0 +1,200 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id          String   @id @default(cuid())
+  name        String
+  fullName    String
+  email       String
+  phone       String
+  location    String
+  headline    String
+  summary     String
+  education   String // JSON
+  experience  String // JSON
+  skills      String // JSON
+  links       String // JSON
+  resumeName  String?
+  completeness Int    @default(0)
+  isDefault   Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  applications Application[]
+  coverLetters CoverLetter[]
+}
+
+model Application {
+  id           String   @id @default(cuid())
+  jobTitle     String
+  company      String
+  site         String
+  siteUrl      String?
+  status       String   @default("applied")
+  profileId    String?
+  profile      Profile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  referralId   String?
+  salaryRange  String?
+  location     String?
+  source       String   @default("manual")
+  notes        String?
+  tags         String?
+  appliedAt    DateTime @default(now())
+  followUpAt   DateTime?
+  updatedAt    DateTime @updatedAt
+}
+
+model CoverLetter {
+  id         String   @id @default(cuid())
+  profileId  String?
+  profile    Profile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  title      String
+  tone       String   @default("professional")
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model SiteTemplate {
+  id             String   @id @default(cuid())
+  siteName       String
+  domain         String
+  logoColor      String   @default("#0077B6")
+  fieldMapping   String   // JSON
+  supportedFeatures String @default("name,email,phone,address,resume")
+  status         String   @default("active")
+  successRate    Int      @default(95)
+  lastVerifiedAt DateTime @default(now())
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
+
+model FieldMapping {
+  id        String   @id @default(cuid())
+  siteName  String
+  fieldName String
+  selector  String
+  fieldType String   @default("text")
+  profileField String
+  isCustom  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([siteName, fieldName])
+}
+
+model StatusHistory {
+  id            String   @id @default(cuid())
+  applicationId String
+  fromStatus    String?
+  toStatus      String
+  note          String?
+  createdAt     DateTime @default(now())
+}
+
+model SavedJob {
+  id          String   @id @default(cuid())
+  jobTitle    String
+  company     String
+  site        String
+  siteUrl     String?
+  location    String?
+  salaryRange String?
+  description String?
+  notes       String?
+  status      String   @default("saved")
+  savedAt     DateTime @default(now())
+}
+
+model InterviewFeedback {
+  id            String   @id @default(cuid())
+  applicationId String
+  interviewType String   @default("technical")
+  interviewDate DateTime @default(now())
+  interviewerName String?
+  overallRating Int      @default(3)
+  difficulty    Int      @default(3)
+  wentWell      String?
+  couldImprove  String?
+  questions     String?
+  learnings     String?
+  nextSteps     String?
+  createdAt     DateTime @default(now())
+}
+
+model Referral {
+  id          String   @id @default(cuid())
+  name        String
+  company     String?
+  role        String?
+  email       String?
+  linkedinUrl String?
+  phone       String?
+  notes      String?
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  type        String   @default("weekly_applications")
+  target      Int      @default(5)
+  period      String   @default("weekly")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String
+  role        String   @default("job_seeker")
+  plan        String   @default("free")
+  avatarColor String   @default("#0077B6")
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SupportTicket {
+  id        String   @id @default(cuid())
+  userId    String?
+  userEmail String
+  subject   String
+  category  String   @default("general")
+  message   String
+  status    String   @default("open")
+  priority  String   @default("normal")
+  reply     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CoachClient {
+  id        String   @id @default(cuid())
+  coachId   String
+  clientEmail String
+  clientName  String
+  clientRole  String   @default("Software Engineer")
+  notes      String?
+  status     String   @default("active")
+  lastActivity String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([coachId, clientEmail])
+}
